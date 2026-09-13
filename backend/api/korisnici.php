@@ -8,12 +8,6 @@ $db = (new Database())->getConnection();
 switch ($method) {
 
     case 'GET':
-        $currentUser = requireAuth();
-        
-        if ($currentUser['uloga'] === 'klijent' && $id && $id !== $currentUser['id']) {
-            jsonResponse(["error" => "Nemate dozvolu."], 403);
-        }
-
         if ($id) {
             $stmt = $db->prepare("SELECT id, naziv_firme, adresa, email, uloga, created_at FROM users WHERE id = ?");
             $stmt->execute([$id]);
@@ -46,14 +40,8 @@ switch ($method) {
         if (isset($data['naziv_firme']) && strlen($data['naziv_firme']) > 100) {
             $errors[] = "Naziv firme ne sme biti duži od 100 karaktera.";
         }
-        if (isset($data['naziv_firme']) && strlen($data['naziv_firme']) < 2) {
-            $errors[] = "Naziv firme mora imati najmanje 2 karaktera.";
-        }
         if (isset($data['email']) && strlen($data['email']) > 50) {
             $errors[] = "Email ne sme biti duži od 50 karaktera.";
-        }
-        if (isset($data['lozinka']) && strlen($data['lozinka']) < 6) {
-            $errors[] = "Lozinka mora imati najmanje 6 karaktera.";
         }
 
         if (!empty($errors)) jsonResponse(["errors" => $errors], 400);
@@ -71,7 +59,6 @@ switch ($method) {
         break;
 
     case 'PUT':
-        $currentUser = requireRole(['administrator', 'menadzer']);
         if (!$id) jsonResponse(["error" => "ID je obavezan."], 400);
         $data = getJsonInput();
         $errors = validateRequired($data, ['naziv_firme', 'adresa', 'email', 'uloga']);
@@ -84,7 +71,6 @@ switch ($method) {
         break;
 
     case 'DELETE':
-        requireRole(['administrator']);
         if (!$id) jsonResponse(["error" => "ID je obavezan."], 400);
         $stmt = $db->prepare("DELETE FROM users WHERE id = ?");
         $stmt->execute([$id]);
