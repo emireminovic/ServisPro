@@ -1,15 +1,11 @@
-FROM php:8.2-apache
+FROM php:8.2-cli
 
 RUN docker-php-ext-install pdo pdo_mysql
 
-RUN a2enmod rewrite headers
+WORKDIR /app
 
-ENV APACHE_DOCUMENT_ROOT=/var/www/html
-
-COPY . /var/www/html/
-
-RUN chown -R www-data:www-data /var/www/html
+COPY . /app
 
 EXPOSE 80
 
-CMD ["apache2-foreground"]
+CMD ["php", "-S", "0.0.0.0:80", "-t", "/app"]
