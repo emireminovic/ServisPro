@@ -1,0 +1,27 @@
+<div class="page-header">
+  <h2>Fakture</h2>
+  <div class="header-actions">
+    <select [(ngModel)]="filterStatus" (ngModelChange)="loadData()" class="filter-select">
+      <option value="">Sve</option><option value="plaćeno">Plaćeno</option><option value="neplaćeno">Neplaćeno</option>
+    </select>
+  </div>
+</div>
+<div class="stats-row">
+  <div class="stat-card"><div class="stat-icon" style="background:#d1fae5;color:#059669;">💰</div><div class="stat-label">Naplaćeno</div><div class="stat-value">{{ totalPlaceno | number }} RSD</div></div>
+  <div class="stat-card"><div class="stat-icon" style="background:#fee2e2;color:#dc2626;">⏳</div><div class="stat-label">Neplaćeno</div><div class="stat-value">{{ totalNeplaceno | number }} RSD</div></div>
+</div>
+<div class="card">
+  <table>
+    <thead><tr><th>ID</th><th>Datum</th><th>Zahtev</th><th>Klijent</th><th>Materijal</th><th>Putni</th><th>Sati</th><th>Ukupno</th><th>Status</th>
+    <th *ngIf="auth.hasRole('administrator','menadzer')">Akcija</th></tr></thead>
+    <tbody>
+      <tr *ngFor="let f of fakture">
+        <td>#{{ f.id }}</td><td>{{ f.datum_izdavanja }}</td><td class="desc-cell">{{ f.opis_kvara }}</td><td>{{ f.klijent_naziv }}</td>
+        <td>{{ f.materijal | number }} RSD</td><td>{{ f.putni_troskovi | number }} RSD</td><td>{{ f.radni_sati }}h</td>
+        <td class="amount">{{ f.iznos | number }} RSD</td>
+        <td><span class="badge" [ngClass]="f.status_naplate === 'plaćeno' ? 'badge-success' : 'badge-danger'">{{ f.status_naplate }}</span></td>
+        <td *ngIf="auth.hasRole('administrator','menadzer')"><button class="btn btn-sm btn-outline" (click)="toggleNaplata(f)">{{ f.status_naplate === 'plaćeno' ? 'Poništi' : 'Naplati' }}</button></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,69 @@
+<div class="page-header">
+  <h2>Servisni zahtevi</h2>
+  <div class="header-actions">
+    <select [(ngModel)]="filterStatus" (ngModelChange)="loadZahtevi()" class="filter-select">
+      <option value="">Svi statusi</option>
+      <option value="prijavljeno">Prijavljeno</option>
+      <option value="u radu">U radu</option>
+      <option value="rešeno">Rešeno</option>
+      <option value="fakturisano">Fakturisano</option>
+    </select>
+    <button class="btn btn-primary" (click)="showModal = true">+ Novi zahtev</button>
+  </div>
+</div>
+
+<div class="card">
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th><th>Opis kvara</th><th>Uređaj</th><th>Klijent</th><th>Serviser</th><th>Datum</th><th>Trajanje</th><th>Status</th>
+        <th *ngIf="auth.hasRole('administrator','menadzer','serviser')">Akcije</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let z of zahtevi">
+        <td>#{{ z.id }}</td>
+        <td class="desc-cell">{{ z.opis_kvara }}</td>
+        <td>{{ z.uredjaj_tip }} – {{ z.serijski_broj }}</td>
+        <td>{{ z.klijent_naziv }}</td>
+        <td>{{ z.serviser_naziv || 'Nedodeljen' }}</td>
+        <td>{{ z.datum_prijave }}</td>
+        <td>{{ z.trajanje_min ? z.trajanje_min + ' min' : '—' }}</td>
+        <td><span class="badge" [ngClass]="statusClass(z.status)">{{ z.status }}</span></td>
+        <td class="actions-cell" *ngIf="auth.hasRole('administrator','menadzer','serviser')">
+          <button *ngIf="z.status === 'prijavljeno'" class="btn btn-sm btn-outline" (click)="promeniStatus(z, 'u radu')">Prihvati</button>
+          <button *ngIf="z.status === 'u radu'" class="btn btn-sm btn-outline" (click)="promeniStatus(z, 'rešeno')">Reši</button>
+          <button *ngIf="z.status === 'rešeno' && auth.hasRole('administrator','menadzer')" class="btn btn-sm btn-outline" (click)="promeniStatus(z, 'fakturisano')">Fakturiši</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="modal-overlay" *ngIf="showModal" (click)="showModal = false">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <h3>Novi servisni zahtev</h3>
+    <div class="form-group" style="margin-bottom:12px">
+      <label>Opis kvara</label>
+      <textarea [(ngModel)]="newZahtev.opis_kvara" rows="3" placeholder="Opišite problem..."></textarea>
+    </div>
+    <div class="form-group" style="margin-bottom:12px">
+      <label>Uređaj</label>
+      <select [(ngModel)]="newZahtev.uredjaj_id">
+        <option [ngValue]="0">— Izaberite uređaj —</option>
+        <option *ngFor="let u of uredjaji" [ngValue]="u.id">{{ u.tip }} – {{ u.serijski_broj }}</option>
+      </select>
+    </div>
+    <div class="form-group" style="margin-bottom:12px" *ngIf="auth.hasRole('administrator','menadzer')">
+      <label>Dodeli serviseru</label>
+      <select [(ngModel)]="newZahtev.serviser_id">
+        <option [ngValue]="null">Nedodeljen</option>
+        <option *ngFor="let s of serviseri" [ngValue]="s.id">{{ s.naziv_firme }}</option>
+      </select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" (click)="showModal = false">Otkaži</button>
+      <button class="btn btn-primary" (click)="addZahtev()">Sačuvaj</button>
+    </div>
+  </div>
+</div>

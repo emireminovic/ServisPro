@@ -1,0 +1,32 @@
+<div class="page-header">
+  <h2>Korisnici</h2>
+  <div class="header-actions">
+    <select [(ngModel)]="filterRole" (ngModelChange)="loadData()" class="filter-select">
+      <option value="">Sve uloge</option><option value="administrator">Administrator</option><option value="menadzer">Menadžer</option><option value="serviser">Serviser</option><option value="klijent">Klijent</option>
+    </select>
+    <button class="btn btn-primary" (click)="showModal = true" *ngIf="auth.hasRole('administrator')">+ Novi korisnik</button>
+  </div>
+</div>
+<div class="card">
+  <table>
+    <thead><tr><th>ID</th><th>Naziv firme</th><th>Adresa</th><th>Email</th><th>Uloga</th><th *ngIf="auth.hasRole('administrator')">Akcija</th></tr></thead>
+    <tbody>
+      <tr *ngFor="let u of users">
+        <td>#{{ u.id }}</td><td>{{ u.naziv_firme }}</td><td>{{ u.adresa }}</td><td>{{ u.email }}</td>
+        <td><span class="badge" [ngClass]="roleClass(u.uloga)">{{ u.uloga }}</span></td>
+        <td *ngIf="auth.hasRole('administrator')"><button class="btn btn-sm btn-outline" (click)="deleteUser(u.id)">Obriši</button></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="modal-overlay" *ngIf="showModal" (click)="showModal = false">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <h3>Novi korisnik</h3>
+    <div class="form-group" style="margin-bottom:12px"><label>Naziv firme</label><input [(ngModel)]="newUser.naziv_firme" /></div>
+    <div class="form-group" style="margin-bottom:12px"><label>Adresa</label><input [(ngModel)]="newUser.adresa" /></div>
+    <div class="form-group" style="margin-bottom:12px"><label>Email</label><input [(ngModel)]="newUser.email" type="email" /></div>
+    <div class="form-group" style="margin-bottom:12px"><label>Lozinka</label><input [(ngModel)]="newUser.lozinka" type="password" /></div>
+    <div class="form-group" style="margin-bottom:12px"><label>Uloga</label><select [(ngModel)]="newUser.uloga"><option value="klijent">Klijent</option><option value="serviser">Serviser</option><option value="menadzer">Menadžer</option><option value="administrator">Administrator</option></select></div>
+    <div class="modal-actions"><button class="btn btn-outline" (click)="showModal = false">Otkaži</button><button class="btn btn-primary" (click)="addUser()">Sačuvaj</button></div>
+  </div>
+</div>

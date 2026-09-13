@@ -1,0 +1,58 @@
+<div class="page-header">
+  <h2>Evidencija uređaja</h2>
+  <div class="header-actions">
+    <select [(ngModel)]="filterTip" (ngModelChange)="loadData()" class="filter-select">
+      <option value="">Svi tipovi</option>
+      <option value="fiskalna kasa">Fiskalna kasa</option>
+      <option value="POS">POS</option>
+      <option value="štampač">Štampač</option>
+    </select>
+    <button class="btn btn-primary" (click)="showModal = true" *ngIf="auth.hasRole('administrator','menadzer')">+ Novi uređaj</button>
+  </div>
+</div>
+
+<div class="card">
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th><th>Tip</th><th>Serijski broj</th><th>Proizvođač</th><th>Verzija</th><th>Instalacija</th><th>Garancija do</th><th>Klijent</th><th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let u of uredjaji">
+        <td>#{{ u.id }}</td>
+        <td>{{ u.tip }}</td>
+        <td class="mono">{{ u.serijski_broj }}</td>
+        <td>{{ u.proizvodjac || '—' }}</td>
+        <td>{{ u.verzija_softvera || '—' }}</td>
+        <td>{{ u.datum_instalacije }}</td>
+        <td>{{ u.garancija_do || '—' }}</td>
+        <td>{{ u.klijent_naziv }}</td>
+        <td><span class="badge" [ngClass]="statusClass(u.status)">{{ u.status }}</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="modal-overlay" *ngIf="showModal" (click)="showModal = false">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <h3>Novi uređaj</h3>
+    <div class="form-group" style="margin-bottom:12px">
+      <label>Tip</label>
+      <select [(ngModel)]="newUredjaj.tip"><option value="fiskalna kasa">Fiskalna kasa</option><option value="POS">POS</option><option value="štampač">Štampač</option></select>
+    </div>
+    <div class="form-group" style="margin-bottom:12px"><label>Serijski broj</label><input [(ngModel)]="newUredjaj.serijski_broj" placeholder="FK-2026-XXXXX" /></div>
+    <div class="form-group" style="margin-bottom:12px"><label>Proizvođač</label><input [(ngModel)]="newUredjaj.proizvodjac" placeholder="Galeb Group" /></div>
+    <div class="form-group" style="margin-bottom:12px"><label>Verzija softvera</label><input [(ngModel)]="newUredjaj.verzija_softvera" placeholder="v3.0.0" /></div>
+    <div class="form-group" style="margin-bottom:12px"><label>Datum instalacije</label><input [(ngModel)]="newUredjaj.datum_instalacije" type="date" /></div>
+    <div class="form-group" style="margin-bottom:12px"><label>Garancija do</label><input [(ngModel)]="newUredjaj.garancija_do" type="date" /></div>
+    <div class="form-group" style="margin-bottom:12px">
+      <label>Klijent</label>
+      <select [(ngModel)]="newUredjaj.klijent_id"><option [ngValue]="0">— Izaberite —</option><option *ngFor="let k of klijenti" [ngValue]="k.id">{{ k.naziv_firme }}</option></select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" (click)="showModal = false">Otkaži</button>
+      <button class="btn btn-primary" (click)="addUredjaj()">Sačuvaj</button>
+    </div>
+  </div>
+</div>

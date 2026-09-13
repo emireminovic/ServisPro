@@ -1,0 +1,15 @@
+<div class="page-header"><h2>GPS praćenje i terenski rad</h2></div>
+<div class="stats-row">
+  <div class="stat-card"><div class="stat-icon" style="background:#dbeafe;color:#2563eb;">📍</div><div class="stat-label">Ukupno zapisa</div><div class="stat-value">{{ gpsPodaci.length }}</div></div>
+  <div class="stat-card"><div class="stat-icon" style="background:#d1fae5;color:#059669;">🚗</div><div class="stat-label">Ukupna kilometraža</div><div class="stat-value">{{ totalKm }} km</div></div>
+</div>
+<div class="card">
+  <table>
+    <thead><tr><th>ID</th><th>Serviser</th><th>Lokacija</th><th>Vreme</th><th>Kilometraža</th></tr></thead>
+    <tbody>
+      <tr *ngFor="let g of gpsPodaci">
+        <td>#{{ g.id }}</td><td>{{ g.serviser_naziv }}</td><td>{{ g.lokacija }}</td><td>{{ formatTime(g.vreme) }}</td><td>{{ g.kilometraza }} km</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

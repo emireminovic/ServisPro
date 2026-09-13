@@ -1,0 +1,21 @@
+<div class="page-header"><h2>Poruke</h2></div>
+<div class="chat-container">
+  <div class="message-list">
+    <div *ngFor="let p of poruke" class="message-bubble" [class.mine]="isMyMessage(p)" [class.theirs]="!isMyMessage(p)">
+      <div class="msg-meta">
+        <span class="msg-sender">{{ p.sender_naziv }}</span>
+        <span class="msg-time">{{ formatTime(p.vreme_slanja) }}</span>
+      </div>
+      <div class="msg-content">{{ p.sadrzaj }}</div>
+    </div>
+    <div *ngIf="poruke.length === 0" class="empty-state">Nemate poruka.</div>
+  </div>
+  <div class="compose-bar">
+    <select [(ngModel)]="selectedReceiverId" class="receiver-select">
+      <option [ngValue]="0">Pošalji kome...</option>
+      <option *ngFor="let u of otherUsers" [ngValue]="u.id">{{ u.naziv_firme }} ({{ u.uloga }})</option>
+    </select>
+    <input [(ngModel)]="newMessage" placeholder="Napiši poruku..." (keyup.enter)="send()" />
+    <button class="btn btn-primary" (click)="send()">Pošalji</button>
+  </div>
+</div>

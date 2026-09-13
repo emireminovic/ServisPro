@@ -1,0 +1,25 @@
+.login-page {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+}
+.login-card {
+  background: var(--surface);
+  border-radius: 16px;
+  padding: 40px;
+  width: 380px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+.login-brand {
+  text-align: center;
+  margin-bottom: 32px;
+  .login-icon { font-size: 40px; display: block; margin-bottom: 12px; }
+  h1 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+  p { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
+}
+.form-group { margin-bottom: 16px; input { width: 100%; } }
+.error { color: var(--danger); font-size: 12px; margin-bottom: 12px; }
+.login-btn { width: 100%; justify-content: center; padding: 10px; font-size: 14px; }
+.hint { font-size: 11px; color: var(--text-light); text-align: center; margin-top: 16px; }

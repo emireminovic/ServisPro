@@ -1,0 +1,8 @@
+.reports-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 16px;
+  .card {
+    h3 { font-size: 15px; font-weight: 600; margin-bottom: 16px; }
+  }
+}

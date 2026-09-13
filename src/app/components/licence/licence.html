@@ -1,0 +1,12 @@
+<div class="page-header"><h2>Licence i sertifikati</h2></div>
+<div class="card">
+  <table>
+    <thead><tr><th>Broj</th><th>Proizvođač</th><th>Serviser</th><th>Datum izdavanja</th><th>Datum isteka</th><th>Preostalo</th></tr></thead>
+    <tbody>
+      <tr *ngFor="let l of licence">
+        <td class="mono">{{ l.broj }}</td><td>{{ l.proizvodjac }}</td><td>{{ l.serviser_naziv }}</td><td>{{ l.datum_izdavanja }}</td><td>{{ l.datum_isteka }}</td>
+        <td><span class="badge" [ngClass]="expiryClass(l.dana_do_isteka!)">{{ expiryLabel(l.dana_do_isteka!) }}</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

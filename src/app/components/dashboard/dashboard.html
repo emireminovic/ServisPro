@@ -1,0 +1,51 @@
+<div class="page-header">
+  <h2>Kontrolna tabla</h2>
+</div>
+
+<div class="stats-row">
+  <div class="stat-card">
+    <div class="stat-icon" style="background:#dbeafe;color:#2563eb;">🖥️</div>
+    <div class="stat-label">Ukupno uređaja</div>
+    <div class="stat-value">{{ stats.ukupno_uredjaja || 0 }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon" style="background:#fef3c7;color:#d97706;">🔧</div>
+    <div class="stat-label">Otvoreni zahtevi</div>
+    <div class="stat-value">{{ stats.otvoreni_zahtevi || 0 }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon" style="background:#fee2e2;color:#dc2626;">📄</div>
+    <div class="stat-label">Neplaćene fakture</div>
+    <div class="stat-value">{{ stats.neplacene_fakture || 0 }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon" style="background:#fce7f3;color:#db2777;">📜</div>
+    <div class="stat-label">Licence ističu (&lt;30d)</div>
+    <div class="stat-value">{{ stats.licence_isticu || 0 }}</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <h3>Poslednji servisni zahtevi</h3>
+    <a routerLink="/servisni-zahtevi" class="btn btn-outline btn-sm">Prikaži sve</a>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th><th>Opis kvara</th><th>Uređaj</th><th>Klijent</th><th>Serviser</th><th>Datum</th><th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let z of recentZahtevi">
+        <td>#{{ z.id }}</td>
+        <td>{{ z.opis_kvara }}</td>
+        <td>{{ z.uredjaj_tip }} – {{ z.serijski_broj }}</td>
+        <td>{{ z.klijent_naziv }}</td>
+        <td>{{ z.serviser_naziv || 'Nedodeljen' }}</td>
+        <td>{{ z.datum_prijave }}</td>
+        <td><span class="badge" [ngClass]="statusClass(z.status)">{{ z.status }}</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

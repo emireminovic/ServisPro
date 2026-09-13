@@ -1,0 +1,579 @@
+{
+  "info": {
+    "name": "FiskalServis API",
+    "description": "Kompletna Postman kolekcija za testiranje REST API-ja informacionog sistema za servisiranje fiskalnih uređaja i POS terminala.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://localhost/servisni-sistem/backend/api" }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login - uspešan",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/auth.php",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@servis.rs\",\n  \"lozinka\": \"password\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Login - pogrešna lozinka",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/auth.php",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@servis.rs\",\n  \"lozinka\": \"pogresna123\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Login - nepostojeći email",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/auth.php",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"nepostoji@test.rs\",\n  \"lozinka\": \"password\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Login - prazna polja",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/auth.php",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"\",\n  \"lozinka\": \"\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Korisnici",
+      "item": [
+        {
+          "name": "GET - svi korisnici",
+          "request": { "method": "GET", "url": "{{base_url}}/korisnici.php" }
+        },
+        {
+          "name": "GET - filter po ulozi (serviser)",
+          "request": { "method": "GET", "url": "{{base_url}}/korisnici.php?uloga=serviser" }
+        },
+        {
+          "name": "GET - pojedinačni korisnik",
+          "request": { "method": "GET", "url": "{{base_url}}/korisnici.php?id=1" }
+        },
+        {
+          "name": "GET - nepostojeći ID",
+          "request": { "method": "GET", "url": "{{base_url}}/korisnici.php?id=999" }
+        },
+        {
+          "name": "POST - kreiranje korisnika (validno)",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/korisnici.php",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"naziv_firme\": \"Nova Firma\",\n  \"adresa\": \"Beograd, Knez Mihailova 1\",\n  \"email\": \"nova@firma.rs\",\n  \"lozinka\": \"sigurnaLozinka123\",\n  \"uloga\": \"klijent\"\n}"
+            }
+          }
+        },
+        {
+          "name": "POST - duplikat email (409)",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/korisnici.php",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"naziv_firme\": \"Test\",\n  \"adresa\": \"Test\",\n  \"email\": \"admin@servis.rs\",\n  \"lozinka\": \"test123\",\n  \"uloga\": \"klijent\"\n}"
+            }
+          }
+        },
+        {
+          "name": "POST - nevažeća uloga (400)",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/korisnici.php",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"naziv_firme\": \"Test\",\n  \"adresa\": \"Test\",\n  \"email\": \"test@test.rs\",\n  \"lozinka\": \"test123\",\n  \"uloga\": \"superadmin\"\n}"
+            }
+          }
+        },
+        {
+          "name": "POST - prazna polja (400)",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/korisnici.php",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"naziv_firme\": \"\",\n  \"adresa\": \"\",\n  \"email\": \"\",\n  \"lozinka\": \"\",\n  \"uloga\": \"\"\n}"
+            }
+          }
+        },
+        {
+          "name": "POST - nevažeći email format (400)",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/korisnici.php",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"naziv_firme\": \"Test\",\n  \"adresa\": \"Test\",\n  \"email\": \"ovo-nije-email\",\n  \"lozinka\": \"test123\",\n  \"uloga\": \"klijent\"\n}"
+            }
+          }
+        },
+        {
+          "name": "PUT - ažuriranje korisnika",
+          "request": {
+            "method": "PUT",
+            "url": "{{base_url}}/korisnici.php?id=4",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"naziv_firme\": \"Market Lav - Ažurirano\",\n  \"adresa\": \"Tutin, Nova adresa 10\",\n  \"email\": \"lav@market.rs\",\n  \"uloga\": \"klijent\"\n}"
+            }
+          }
+        },
+        {
+          "name": "DELETE - brisanje korisnika",
+          "request": { "method": "DELETE", "url": "{{base_url}}/korisnici.php?id=9" }
+        }
+      ]
+    },
+    {
+      "name": "Uredjaji",
+      "item": [
+        {
+          "name": "GET - svi uređaji",
+          "request": { "method": "GET", "url": "{{base_url}}/uredjaji.php" }
+        },
+        {
+          "name": "GET - filter po tipu",
+          "request": { "method": "GET", "url": "{{base_url}}/uredjaji.php?tip=POS" }
+        },
+        {
+          "name": "GET - filter po klijentu",
+          "request": { "method": "GET", "url": "{{base_url}}/uredjaji.php?klijent_id=4" }
+        },
+        {
+          "name": "POST - novi uređaj (validno)",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/uredjaji.php",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tip\": \"POS\",\n  \"serijski_broj\": \"POS-2026-TEST1\",\n  \"datum_instalacije\": \"2026-09-12\",\n  \"garancija_do\": \"2028-09-12\",\n  \"proizvodjac\": \"HCP\",\n  \"verzija_softvera\": \"v2.5.0\",\n  \"klijent_id\": 4\n}"
+            }
+          }
+        },
+        {
+          "name": "POST - duplikat serijskog broja (409)",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/uredjaji.php",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tip\": \"POS\",\n  \"serijski_broj\": \"FK-2024-00112\",\n  \"datum_instalacije\": \"2026-09-12\",\n  \"klijent_id\": 4\n}"
+            }
+          }
+        },
+        {
+          "name": "POST - nevažeći tip (400)",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/uredjaji.php",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tip\": \"laptop\",\n  \"serijski_broj\": \"TEST-001\",\n  \"datum_instalacije\": \"2026-09-12\",\n  \"klijent_id\": 4\n}"
+            }
+          }
+        },
+        {
+          "name": "PUT - promena statusa",
+          "request": {
+            "method": "PUT",
+            "url": "{{base_url}}/uredjaji.php?id=2",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"aktivno\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Servisni zahtevi",
+      "item": [
+        {
+          "name": "GET - svi zahtevi",
+          "request": { "method": "GET", "url": "{{base_url}}/zahtevi.php" }
+        },
+        {
+          "name": "GET - filter po statusu",
+          "request": { "method": "GET", "url": "{{base_url}}/zahtevi.php?status=prijavljeno" }
+        },
+        {
+          "name": "GET - filter po serviseru",
+          "request": { "method": "GET", "url": "{{base_url}}/zahtevi.php?serviser_id=2" }
+        },
+        {
+          "name": "GET - filter po klijentu",
+          "request": { "method": "GET", "url": "{{base_url}}/zahtevi.php?klijent_id=4" }
+        },
+        {
+          "name": "POST - novi zahtev (validno)",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/zahtevi.php",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"opis_kvara\": \"Fiskalna kasa se gasi sama od sebe nakon 10 minuta rada\",\n  \"uredjaj_id\": 1,\n  \"serviser_id\": 2\n}"
+            }
+          }
+        },
+        {
+          "name": "POST - prekratak opis (400)",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/zahtevi.php",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"opis_kvara\": \"ab\",\n  \"uredjaj_id\": 1\n}"
+            }
+          }
+        },
+        {
+          "name": "POST - nepostojeći uređaj (404)",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/zahtevi.php",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"opis_kvara\": \"Testni kvar za nepostojeći uređaj\",\n  \"uredjaj_id\": 999\n}"
+            }
+          }
+        },
+        {
+          "name": "PUT - promena statusa u 'u radu'",
+          "request": {
+            "method": "PUT",
+            "url": "{{base_url}}/zahtevi.php?id=2",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"u radu\",\n  \"serviser_id\": 3\n}"
+            }
+          }
+        },
+        {
+          "name": "PUT - promena statusa u 'rešeno' sa trajanjem",
+          "request": {
+            "method": "PUT",
+            "url": "{{base_url}}/zahtevi.php?id=1",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"rešeno\",\n  \"trajanje_min\": 75\n}"
+            }
+          }
+        },
+        {
+          "name": "PUT - nevažeći status (400)",
+          "request": {
+            "method": "PUT",
+            "url": "{{base_url}}/zahtevi.php?id=1",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"otkazano\"\n}"
+            }
+          }
+        },
+        {
+          "name": "PUT - negativno trajanje (400)",
+          "request": {
+            "method": "PUT",
+            "url": "{{base_url}}/zahtevi.php?id=1",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"trajanje_min\": -10\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Fakture",
+      "item": [
+        {
+          "name": "GET - sve fakture",
+          "request": { "method": "GET", "url": "{{base_url}}/fakture.php" }
+        },
+        {
+          "name": "GET - neplaćene",
+          "request": { "method": "GET", "url": "{{base_url}}/fakture.php?status_naplate=neplaćeno" }
+        },
+        {
+          "name": "POST - nova faktura (validno)",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/fakture.php",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"iznos\": 5500.00,\n  \"materijal\": 2000.00,\n  \"putni_troskovi\": 1000.00,\n  \"radni_sati\": 2.5,\n  \"zahtev_id\": 1\n}"
+            }
+          }
+        },
+        {
+          "name": "POST - iznos 0 (400)",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/fakture.php",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"iznos\": 0,\n  \"zahtev_id\": 1\n}"
+            }
+          }
+        },
+        {
+          "name": "POST - negativan iznos (400)",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/fakture.php",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"iznos\": -500,\n  \"zahtev_id\": 1\n}"
+            }
+          }
+        },
+        {
+          "name": "POST - duplikat zahtev_id (409)",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/fakture.php",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"iznos\": 3000,\n  \"zahtev_id\": 4\n}"
+            }
+          }
+        },
+        {
+          "name": "PUT - naplata fakture",
+          "request": {
+            "method": "PUT",
+            "url": "{{base_url}}/fakture.php?id=2",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status_naplate\": \"plaćeno\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Licence",
+      "item": [
+        {
+          "name": "GET - sve licence",
+          "request": { "method": "GET", "url": "{{base_url}}/licence.php" }
+        },
+        {
+          "name": "GET - licence koje ističu za 30 dana",
+          "request": { "method": "GET", "url": "{{base_url}}/licence.php?istice=30" }
+        },
+        {
+          "name": "GET - licence po serviseru",
+          "request": { "method": "GET", "url": "{{base_url}}/licence.php?serviser_id=2" }
+        },
+        {
+          "name": "POST - nova licenca",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/licence.php",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"broj\": \"LIC-2026-TEST1\",\n  \"datum_izdavanja\": \"2026-09-01\",\n  \"datum_isteka\": \"2028-09-01\",\n  \"proizvodjac\": \"Galeb Group\",\n  \"serviser_id\": 2\n}"
+            }
+          }
+        },
+        {
+          "name": "POST - datum isteka pre izdavanja (400)",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/licence.php",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"broj\": \"LIC-BAD\",\n  \"datum_izdavanja\": \"2026-09-01\",\n  \"datum_isteka\": \"2025-01-01\",\n  \"proizvodjac\": \"Test\",\n  \"serviser_id\": 2\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Poruke",
+      "item": [
+        {
+          "name": "GET - poruke za korisnika",
+          "request": { "method": "GET", "url": "{{base_url}}/poruke.php?user_id=2" }
+        },
+        {
+          "name": "POST - pošalji poruku",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/poruke.php",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sadrzaj\": \"Testna poruka iz Postmana\",\n  \"sender_id\": 7,\n  \"receiver_id\": 2\n}"
+            }
+          }
+        },
+        {
+          "name": "POST - poruka samom sebi (400)",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/poruke.php",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sadrzaj\": \"Test\",\n  \"sender_id\": 2,\n  \"receiver_id\": 2\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Obavestenja",
+      "item": [
+        {
+          "name": "GET - sva obaveštenja",
+          "request": { "method": "GET", "url": "{{base_url}}/obavestenja.php" }
+        },
+        {
+          "name": "GET - obaveštenja za korisnika",
+          "request": { "method": "GET", "url": "{{base_url}}/obavestenja.php?user_id=4" }
+        },
+        {
+          "name": "PUT - označi kao pročitano",
+          "request": {
+            "method": "PUT",
+            "url": "{{base_url}}/obavestenja.php?id=2",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{}" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "GPS podaci",
+      "item": [
+        {
+          "name": "GET - svi GPS zapisi",
+          "request": { "method": "GET", "url": "{{base_url}}/gps.php" }
+        },
+        {
+          "name": "GET - GPS po serviseru",
+          "request": { "method": "GET", "url": "{{base_url}}/gps.php?serviser_id=2" }
+        },
+        {
+          "name": "POST - novi GPS zapis",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/gps.php",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lokacija\": \"Kraljevo, Cara Dušana 15\",\n  \"kilometraza\": 45.5,\n  \"serviser_id\": 2\n}"
+            }
+          }
+        },
+        {
+          "name": "POST - negativna kilometraža (400)",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/gps.php",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lokacija\": \"Test\",\n  \"kilometraza\": -10,\n  \"serviser_id\": 2\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Izvestaji",
+      "item": [
+        {
+          "name": "Dashboard statistike",
+          "request": { "method": "GET", "url": "{{base_url}}/izvestaji.php?type=dashboard" }
+        },
+        {
+          "name": "Kvarovi po tipu uređaja",
+          "request": { "method": "GET", "url": "{{base_url}}/izvestaji.php?type=kvarovi_po_tipu" }
+        },
+        {
+          "name": "Kvarovi po mesecu",
+          "request": { "method": "GET", "url": "{{base_url}}/izvestaji.php?type=kvarovi_po_mesecu" }
+        },
+        {
+          "name": "Efikasnost servisera",
+          "request": { "method": "GET", "url": "{{base_url}}/izvestaji.php?type=efikasnost_servisera" }
+        },
+        {
+          "name": "Najčešći kvarovi",
+          "request": { "method": "GET", "url": "{{base_url}}/izvestaji.php?type=najcesci_kvarovi" }
+        },
+        {
+          "name": "Finansijski izveštaj",
+          "request": { "method": "GET", "url": "{{base_url}}/izvestaji.php?type=finansije" }
+        },
+        {
+          "name": "Prihod po klijentu",
+          "request": { "method": "GET", "url": "{{base_url}}/izvestaji.php?type=prihod_po_klijentu" }
+        },
+        {
+          "name": "Prihod po serviseru",
+          "request": { "method": "GET", "url": "{{base_url}}/izvestaji.php?type=prihod_po_serviseru" }
+        },
+        {
+          "name": "Nepoznat tip izveštaja (400)",
+          "request": { "method": "GET", "url": "{{base_url}}/izvestaji.php?type=nepostojeci" }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,69 @@
+<div class="page-header"><h2>Izveštaji i analitika</h2></div>
+
+<!-- Finansijski pregled -->
+<div class="stats-row">
+  <div class="stat-card"><div class="stat-icon" style="background:#dbeafe;color:#2563eb;">📊</div><div class="stat-label">Ukupan prihod</div><div class="stat-value">{{ finansije.ukupan_prihod | number }} RSD</div></div>
+  <div class="stat-card"><div class="stat-icon" style="background:#d1fae5;color:#059669;">💰</div><div class="stat-label">Naplaćeno</div><div class="stat-value">{{ finansije.naplaceno | number }} RSD</div></div>
+  <div class="stat-card"><div class="stat-icon" style="background:#fee2e2;color:#dc2626;">⏳</div><div class="stat-label">Nenaplaćeno</div><div class="stat-value">{{ finansije.nenaplaceno | number }} RSD</div></div>
+  <div class="stat-card"><div class="stat-icon" style="background:#fef3c7;color:#d97706;">🔧</div><div class="stat-label">Ukupno materijal</div><div class="stat-value">{{ finansije.ukupan_materijal | number }} RSD</div></div>
+</div>
+
+<div class="reports-grid">
+  <!-- Kvarovi po tipu uređaja -->
+  <div class="card">
+    <h3>Kvarovi po tipu uređaja</h3>
+    <table>
+      <thead><tr><th>Tip uređaja</th><th>Broj kvarova</th></tr></thead>
+      <tbody><tr *ngFor="let k of kvaroviPoTipu"><td>{{ k.tip }}</td><td>{{ k.broj_kvarova }}</td></tr></tbody>
+    </table>
+  </div>
+
+  <!-- Kvarovi po mesecu -->
+  <div class="card">
+    <h3>Kvarovi po mesecu</h3>
+    <table>
+      <thead><tr><th>Mesec</th><th>Broj</th></tr></thead>
+      <tbody><tr *ngFor="let k of kvaroviPoMesecu"><td>{{ k.mesec }}</td><td>{{ k.broj }}</td></tr></tbody>
+    </table>
+  </div>
+
+  <!-- Efikasnost servisera -->
+  <div class="card">
+    <h3>Efikasnost servisera</h3>
+    <table>
+      <thead><tr><th>Serviser</th><th>Intervencije</th><th>Rešeno</th><th>Prosečno trajanje</th></tr></thead>
+      <tbody>
+        <tr *ngFor="let e of efikasnost">
+          <td>{{ e.naziv_firme }}</td><td>{{ e.broj_intervencija }}</td><td>{{ e.reseno }}</td><td>{{ e.prosecno_trajanje || '—' }} min</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Najčešći kvarovi -->
+  <div class="card">
+    <h3>Najčešći kvarovi</h3>
+    <table>
+      <thead><tr><th>Opis kvara</th><th>Pojavljivanja</th></tr></thead>
+      <tbody><tr *ngFor="let n of najcesci"><td>{{ n.opis_kvara }}</td><td>{{ n.pojavljivanja }}</td></tr></tbody>
+    </table>
+  </div>
+
+  <!-- Prihod po klijentu -->
+  <div class="card">
+    <h3>Prihod po klijentu</h3>
+    <table>
+      <thead><tr><th>Klijent</th><th>Fakture</th><th>Ukupno</th></tr></thead>
+      <tbody><tr *ngFor="let p of prihodPoKlijentu"><td>{{ p.naziv_firme }}</td><td>{{ p.broj_faktura }}</td><td>{{ p.ukupno | number }} RSD</td></tr></tbody>
+    </table>
+  </div>
+
+  <!-- Prihod po serviseru -->
+  <div class="card">
+    <h3>Prihod po serviseru</h3>
+    <table>
+      <thead><tr><th>Serviser</th><th>Fakture</th><th>Ukupno</th></tr></thead>
+      <tbody><tr *ngFor="let p of prihodPoServiseru"><td>{{ p.naziv_firme }}</td><td>{{ p.broj_faktura }}</td><td>{{ p.ukupno | number }} RSD</td></tr></tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,25 @@
+<div class="login-page">
+  <div class="login-card">
+    <div class="login-brand">
+      <h1>ServisPro</h1>
+      
+    </div>
+
+    <div class="form-group" style="margin-bottom:12px">
+      <label>Email</label>
+      <input [(ngModel)]="email" type="email" placeholder="email@servis.rs" (keyup.enter)="login()" />
+    </div>
+    <div class="form-group" style="margin-bottom:12px">
+      <label>Lozinka</label>
+      <input [(ngModel)]="lozinka" type="password" placeholder="Lozinka" (keyup.enter)="login()" />
+    </div>
+
+    <p class="error" *ngIf="error">{{ error }}</p>
+
+    <button class="btn btn-primary login-btn" (click)="login()" [disabled]="loading">
+      {{ loading ? 'Prijavljivanje...' : 'Prijavi se' }}
+    </button>
+
+    
+  </div>
+</div>
