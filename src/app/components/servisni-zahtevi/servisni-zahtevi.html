@@ -12,34 +12,6 @@
   </div>
 </div>
 
-<div class="stats-row">
-  <div class="stat-card">
-    <div class="stat-icon" style="background:#dbeafe;color:#2563eb;">🔧</div>
-    <div class="stat-label">Ukupno zahteva</div>
-    <div class="stat-value">{{ totalZahteva }}</div>
-  </div>
-  <div class="stat-card">
-    <div class="stat-icon" style="background:#fef3c7;color:#d97706;">📋</div>
-    <div class="stat-label">Prijavljeno</div>
-    <div class="stat-value">{{ prijavljeno }}</div>
-  </div>
-  <div class="stat-card">
-    <div class="stat-icon" style="background:#dbeafe;color:#2563eb;">⚙️</div>
-    <div class="stat-label">U radu</div>
-    <div class="stat-value">{{ uRadu }}</div>
-  </div>
-  <div class="stat-card">
-    <div class="stat-icon" style="background:#d1fae5;color:#059669;">✅</div>
-    <div class="stat-label">Rešeno</div>
-    <div class="stat-value">{{ reseno }}</div>
-  </div>
-  <div class="stat-card">
-    <div class="stat-icon" style="background:#f1f5f9;color:#475569;">📄</div>
-    <div class="stat-label">Fakturisano</div>
-    <div class="stat-value">{{ fakturisano }}</div>
-  </div>
-</div>
-
 <div class="card">
   <table>
     <thead>
@@ -63,6 +35,30 @@
           <button *ngIf="z.status === 'u radu'" class="btn btn-sm btn-outline" (click)="promeniStatus(z, 'rešeno')">Reši</button>
           <button *ngIf="z.status === 'rešeno' && auth.hasRole('administrator','menadzer')" class="btn btn-sm btn-outline" (click)="promeniStatus(z, 'fakturisano')">Fakturiši</button>
         </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="card" style="margin-top:20px">
+  <h3 style="margin-bottom:16px">Statistika zahteva</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Ukupno zahteva</th>
+        <th>Prijavljeno</th>
+        <th>U radu</th>
+        <th>Rešeno</th>
+        <th>Fakturisano</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>{{ totalZahteva }}</strong></td>
+        <td><span class="badge badge-warning">{{ prijavljeno }}</span></td>
+        <td><span class="badge badge-info">{{ uRadu }}</span></td>
+        <td><span class="badge badge-success">{{ reseno }}</span></td>
+        <td><span class="badge badge-neutral">{{ fakturisano }}</span></td>
       </tr>
     </tbody>
   </table>
